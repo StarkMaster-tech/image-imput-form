@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .image-form {
+            margin-bottom: 20px;
+        }
+
+        input {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #errorMessage {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+            display: none;
+        }
+
+        #imageContainer img {
+            max-width: 100%;
+        }
+
+        .image-item {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="image-form">
+        <input type="text" id="imageInput" placeholder="Enter image URL">
+        <input type="text" id="descriptionInput" placeholder="Enter description">
+        <button id="addButton">Add Image</button>
+        <div id="errorMessage" class="hidden"></div>
+    </div>
+    <div id="imageContainer"></div>
+
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const descriptionInput = document.getElementById('descriptionInput');
+        const addButton = document.getElementById('addButton');
+        const imageContainer = document.getElementById('imageContainer');
+        const errorMessage = document.getElementById('errorMessage');
+
+        addButton.addEventListener('click', () => {
+            const imageUrl = imageInput.value;
+            const description = descriptionInput.value;
+
+            if (!imageUrl) {
+                errorMessage.textContent = "Please enter an image URL.";
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+
+            const img = new Image();
+            img.src = imageUrl;
+
+            img.onload = () => {
+                const imageDiv = document.createElement('div');
+                imageDiv.classList.add('image-item');
+
+                imageDiv.innerHTML = `
+                    <img src="${imageUrl}">
+                    <p>${description}</p>
+                `;
+
+                imageContainer.appendChild(imageDiv);
+                errorMessage.classList.add('hidden');
+            };
+
+            img.onerror = () => {
+                errorMessage.textContent = "Invalid image URL.";
+                errorMessage.classList.remove('hidden');
+            };
+
+            const finalDescription = description || "Default Description";
+
+            imageDiv.innerHTML = `
+                <img src="${imageUrl}">
+                <p>${finalDescription}</p>
+            `;
+        });
+    </script>
+</body>
+</html>
